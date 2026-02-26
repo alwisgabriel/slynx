@@ -484,11 +484,9 @@ impl TypeChecker {
                     unreachable!();
                 };
                 let return_type = *return_type;
-                for (f_arg, t_arg) in f_args.iter().zip(args.clone()) {
-                    println!("{f_arg:#?}\n{t_arg:#?}");
-                    self.unify(&f_arg.ty, &t_arg, span)?;
+                for (f_arg, t_args) in f_args.iter().zip(args.clone()) {
+                    self.unify(&f_arg.ty, &t_args, span)?;
                 }
-
                 return_type
             }
             HirExpressionKind::Int(_) => self.types_module.int_id(),
