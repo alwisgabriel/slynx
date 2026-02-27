@@ -189,7 +189,7 @@ impl TypeChecker {
                             .into());
                         }
                         let mut unified_props = Vec::with_capacity(aprops.len());
-                        for (prop_a, prop_b) in aprops.iter().zip(aprops.iter()) {
+                        for (prop_a, prop_b) in aprops.iter().zip(bprops.iter()) {
                             let unified_prop = self.unify(&prop_a.2, &prop_b.2, span)?;
                             unified_props.push((prop_a.0.clone(), prop_a.1.clone(), unified_prop));
                         }

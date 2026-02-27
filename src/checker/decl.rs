@@ -68,8 +68,7 @@ impl TypeChecker {
                             );
                         };
                         let ty = self.unify(&props[*index].2, &ty, span)?;
-                        let HirType::Component { ref mut props } =
-                            self.types_module.get_type_mut(&target).clone()
+                        let HirType::Component { props } = self.types_module.get_type_mut(&target)
                         else {
                             unreachable!(
                                 "The type received when resolving component values should be a component one"

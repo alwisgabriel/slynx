@@ -74,6 +74,7 @@ impl TypeChecker {
                                 .into());
                             }
                         }
+                        HirType::VarReference(_) => lhs.ty,
                         _ => unreachable!(),
                     };
 
@@ -100,11 +101,7 @@ impl TypeChecker {
         Ok(())
     }
     /// Retrieves the type of the provided `expr`. Returns infer if it could not be inferred.
-    pub(super) fn get_type_of_expr(
-        &mut self,
-        expr: &mut HirExpression,
-        span: &Span,
-    ) -> Result<TypeId> {
+    pub(super) fn get_type_of_expr(&mut self, expr: &mut HirExpression) -> Result<TypeId> {
         let expected = expr.ty;
 
         let calc = match expr.kind {
@@ -119,11 +116,16 @@ impl TypeChecker {
                 if expr.ty == self.types_module.bool_id()
                     || matches!(op, Operator::LogicAnd | Operator::LogicOr)
                 {
+                    let lhs_ty = self.get_type_of_expr(&mut *lhs)?;
+                    self.unify(&lhs_ty, &self.types_module.bool_id(), &lhs.span)?;
+                    let rhs_ty = self.get_type_of_expr(&mut *rhs)?;
+                    self.unify(&rhs_ty, &self.types_module.bool_id(), &rhs.span)?;
                     return Ok(self.types_module.bool_id());
                 }
-                let lhs_ty = self.get_type_of_expr(lhs, &lhs.span.clone())?;
-                let rhs_ty = self.get_type_of_expr(rhs, &rhs.span.clone())?;
-                self.unify(&lhs_ty, &rhs_ty, span)?
+
+                let lhs_ty = self.get_type_of_expr(lhs)?;
+                let rhs_ty = self.get_type_of_expr(rhs)?;
+                self.unify(&lhs_ty, &rhs_ty, &expr.span)?
             }
             HirExpressionKind::Identifier(_) => self.resolve(&expr.ty, &expr.span)?,
             HirExpressionKind::Component {
@@ -147,7 +149,7 @@ impl TypeChecker {
                 expr: ref mut e,
             } => {
                 let span = e.span.clone();
-                self.get_type_of_expr(e, &span)?;
+                self.get_type_of_expr(e)?;
 
                 match self.types_module.get_type(&expr.ty) {
                     HirType::Field(FieldMethod::Variable(id, name)) => {
@@ -185,7 +187,7 @@ impl TypeChecker {
             }
         };
 
-        expr.ty = self.unify(&expected, &calc, span)?;
+        expr.ty = self.unify(&expected, &calc, &expr.span)?;
         Ok(expr.ty)
     }
 
