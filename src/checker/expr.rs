@@ -6,13 +6,12 @@ use crate::{
     checker::error::{TypeError, TypeErrorKind},
     hir::{
         TypeId,
-        deffinitions::{
-            ComponentMemberDeclaration, HirExpression, HirExpressionKind, HirStatment,
-            HirStatmentKind, SpecializedComponent,
+        definitions::{
+            ComponentMemberDeclaration, HirExpression, HirExpressionKind, HirStatement,
+            HirStatementKind, SpecializedComponent,
         },
         types::{FieldMethod, HirType},
     },
-    parser::ast::{Operator, Span},
 };
 impl TypeChecker {
     pub(super) fn resolve_specialized(&mut self, _: &mut SpecializedComponent) -> Result<()> {
@@ -21,7 +20,7 @@ impl TypeChecker {
 
     pub(super) fn resolve_statments(
         &mut self,
-        statments: &mut Vec<HirStatment>,
+        statments: &mut Vec<HirStatement>,
         ty: &TypeId,
     ) -> Result<()> {
         let HirType::Function { return_type, .. } = self.types_module.get_type(ty).clone() else {
@@ -29,17 +28,17 @@ impl TypeChecker {
         };
         for statment in statments {
             match &mut statment.kind {
-                HirStatmentKind::Variable { value, .. } => {
+                HirStatementKind::Variable { value, .. } => {
                     value.ty = self.get_type_of_expr(value)?;
                 }
-                HirStatmentKind::Return { expr } => {
+                HirStatementKind::Return { expr } => {
                     expr.ty = self.get_type_of_expr(expr)?;
                     expr.ty = self.unify(&expr.ty, &return_type, &statment.span)?;
                 }
-                HirStatmentKind::Expression { expr } => {
+                HirStatementKind::Expression { expr } => {
                     expr.ty = self.get_type_of_expr(expr)?;
                 }
-                HirStatmentKind::Assign { lhs, value } => {
+                HirStatementKind::Assign { lhs, value } => {
                     let refty = match self.types_module.get_type(&lhs.ty) {
                         HirType::Field(FieldMethod::Type(_, _)) => lhs.ty,
                         HirType::Field(FieldMethod::Variable(v, name)) => {
@@ -80,10 +79,7 @@ impl TypeChecker {
 
                     let ty = self.resolve(&lhs.ty, &statment.span)?;
                     lhs.ty = refty;
-<<<<<<< HEAD
                     value.ty = self.get_type_of_expr(value)?;
-=======
->>>>>>> abb5786 (refactor: refactored type checker to have separated files)
                     value.ty = self.unify(&ty, &value.ty, &value.span)?;
                 }
             }

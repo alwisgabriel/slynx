@@ -4,16 +4,16 @@ use super::TypeChecker;
 
 use crate::hir::{
     TypeId,
-    deffinitions::{ComponentMemberDeclaration, HirDeclaration, HirDeclarationKind},
+    definitions::{ComponentMemberDeclaration, HirDeclaration, HirDeclarationKind},
     types::HirType,
 };
 impl TypeChecker {
     pub(super) fn check_decl(&mut self, decl: &mut HirDeclaration) -> Result<()> {
         match decl.kind {
             HirDeclarationKind::Function {
-                ref mut statments, ..
+                ref mut statements, ..
             } => {
-                self.resolve_statments(statments, &decl.ty)?;
+                self.resolve_statments(statements, &decl.ty)?;
             }
             HirDeclarationKind::Object => {
                 self.declarations.push(decl.ty);

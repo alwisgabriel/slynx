@@ -70,7 +70,7 @@ impl TypesModule {
     pub fn new() -> Self {
         let builtins = BuiltinTypes::new();
         Self {
-            types: vec![],
+            types: vec![builtins.int_ty.clone(), builtins.float_ty.clone(), builtins.str_ty.clone(), builtins.void_ty.clone(), builtins.infer_ty.clone(), builtins.generic_component_ty.clone(), builtins.bool_ty.clone()],
             builtins,
             type_names: HashMap::new(),
             variables: HashMap::new(),

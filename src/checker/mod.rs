@@ -1,7 +1,7 @@
 mod decl;
 pub mod error;
 mod expr;
-mod statment;
+mod statement;
 use std::collections::HashMap;
 
 use color_eyre::eyre::Result;
@@ -10,7 +10,7 @@ use crate::{
     checker::error::{IncompatibleComponentReason, TypeError, TypeErrorKind},
     hir::{
         SlynxHir, TypeId, VariableId,
-        deffinitions::{HirDeclaration, HirDeclarationKind},
+        definitions::{HirDeclaration, HirDeclarationKind},
         symbols::SymbolPointer,
         types::{FieldMethod, HirType, TypesModule},
     },
