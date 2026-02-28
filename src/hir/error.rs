@@ -1,5 +1,5 @@
 use crate::{
-    hir::definitions::HirExpression,
+    hir::{definitions::HirExpression, types::HirType},
     parser::ast::{ComponentExpression, Span},
 };
 
@@ -38,11 +38,30 @@ pub enum HIRErrorKind {
     RecursiveType {
         ty: String,
     },
+    NotAFunction(String, HirType),
+    InvalidFuncallArgLength {
+        func_name: String,
+        expected_length: usize,
+        received_length: usize,
+    },
 }
 
 impl std::fmt::Display for HIRError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let out = match &self.kind {
+
+            HIRErrorKind::InvalidFuncallArgLength {
+                func_name,
+                expected_length,
+                received_length,
+            } => {
+                format!("Function '{func_name}' expected to receive {expected_length} arguments, instead got {received_length} arguments")
+            }
+            HIRErrorKind::NotAFunction(name, ty) => {
+                format!(
+                    "The value with name '{name}' is being used as a function, but its type is {ty:?}"
+                )
+            }
             HIRErrorKind::NameNotRecognized(name) => {
                 format!(
                     "The name '{name}' is not recognized. Check if it exists or you wrote some typo"
@@ -93,12 +112,14 @@ impl std::error::Error for HIRError {}
 #[derive(Debug)]
 pub enum InvalidTypeReason {
     MissingGeneric,
+    IncorrectUsage,
 }
 
 impl std::fmt::Display for InvalidTypeReason {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             InvalidTypeReason::MissingGeneric => write!(f, "missing generic type"),
+            InvalidTypeReason::IncorrectUsage => write!(f, "is being used incorrectly"),
         }
     }
 }

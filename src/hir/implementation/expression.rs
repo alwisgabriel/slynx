@@ -71,7 +71,7 @@ impl SlynxHir {
 
         let HirType::Struct {
             fields: field_types,
-        } = self.types_module.get_type(&ty).clone()
+        } = self.get_type_from_ref(ty).clone()
         else {
             unreachable!();
         };
@@ -112,6 +112,58 @@ impl SlynxHir {
         ty: Option<TypeId>,
     ) -> Result<HirExpression> {
         match expr.kind {
+            ASTExpressionKind::FunctionCall { name, args } => {
+                let func_symbol = self.get_symbol_of(&name.identifier, &expr.span)?;
+                let Some((decl, tyid)) = self
+                    .declarations_module
+                    .retrieve_declaration_data_by_name(&func_symbol)
+                else {
+                    return Err(HIRError {
+                        kind: HIRErrorKind::NameNotRecognized(name.identifier),
+                        span: expr.span,
+                    }
+                    .into());
+                };
+                let ty = self.types_module.get_type(&tyid);
+                let HirType::Function {
+                    return_type,
+                    args: expect_args,
+                } = ty
+                else {
+                    return Err(HIRError {
+                        kind: HIRErrorKind::NotAFunction(name.identifier, ty.clone()),
+                        span: expr.span,
+                    }
+                    .into());
+                };
+                if expect_args.len() != args.len() {
+                    return Err(HIRError {
+                        kind: HIRErrorKind::InvalidFuncallArgLength {
+                            func_name: name.identifier,
+                            expected_length: expect_args.len(),
+                            received_length: args.len(),
+                        },
+                        span: expr.span,
+                    }
+                    .into());
+                }
+                let return_type = *return_type;
+                let exprs = args
+                    .into_iter()
+                    .enumerate()
+                    .map(|(_, v)| self.resolve_expr(v, None))
+                    .collect::<Result<Vec<_>>>()?;
+
+                Ok(HirExpression {
+                    id: ExpressionId::new(),
+                    ty: return_type,
+                    kind: HirExpressionKind::FunctionCall {
+                        name: decl,
+                        args: exprs,
+                    },
+                    span: expr.span,
+                })
+            }
             ASTExpressionKind::Boolean(b) => Ok(HirExpression {
                 id: ExpressionId::new(),
                 ty: self.types_module.bool_id(),
@@ -173,10 +225,6 @@ impl SlynxHir {
                 };
 
                 let kind = self.organized_object_fields(ty, fields, &expr.span)?;
-                let ty = self.types_module.insert_unnamed_type(HirType::Reference {
-                    rf: ty,
-                    generics: Vec::new(),
-                });
                 Ok(HirExpression {
                     id: ExpressionId::new(), // Changed to ExpressionId
                     ty,
@@ -263,10 +311,10 @@ impl SlynxHir {
         };
         Ok(HirExpression {
             ty: match op {
-                Operator::LogicAnd | Operator::LogicOr | Operator::Star | Operator::Slash => lhs.ty,
-                Operator::Equals
-                | Operator::Add
-                | Operator::Sub
+                Operator::Star | Operator::Slash | Operator::Add | Operator::Sub => lhs.ty,
+                Operator::LogicAnd
+                | Operator::LogicOr
+                | Operator::Equals
                 | Operator::GreaterThan
                 | Operator::GreaterThanOrEqual
                 | Operator::LessThan

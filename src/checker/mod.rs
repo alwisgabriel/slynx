@@ -135,13 +135,20 @@ impl TypeChecker {
                     .into())
                 }
             }
-            HirType::Field(FieldMethod::Variable(rf, n)) => {
-                let HirType::Reference { rf, .. } = self.retrieve_reference_of(&rf, span)? else {
+            HirType::Field(FieldMethod::Variable(var_id, n)) => {
+                let HirType::Reference { rf, .. } = self.retrieve_reference_of(&var_id, span)? else {
                     unreachable!();
                 };
+                let object_ty = *self.types_module.get_variable(&var_id).ok_or(TypeError {
+                    kind: TypeErrorKind::Unrecognized,
+                    span: span.clone(),
+                })?;
 
                 let concrete_type = self.types_module.get_type(&rf);
-                let s_fields = self.structs.get(&rf).unwrap();
+                let s_fields = self.structs.get(&object_ty).ok_or(TypeError {
+                    kind: TypeErrorKind::Unrecognized,
+                    span: span.clone(),
+                })?;
                 let HirType::Struct { fields } = concrete_type else {
                     unreachable!("Type should be a struct. Fields only happen to structs");
                 };
@@ -373,10 +380,17 @@ impl TypeChecker {
                             else {
                                 unreachable!();
                             };
+                            let object_ty = *self.types_module.get_variable(v).ok_or(TypeError {
+                                kind: TypeErrorKind::Unrecognized,
+                                span: lhs.span.clone(),
+                            })?;
                             if let Some(index) = self
                                 .structs
-                                .get(&rf)
-                                .expect("Type should be defined")
+                                .get(&object_ty)
+                                .ok_or(TypeError {
+                                    kind: TypeErrorKind::Unrecognized,
+                                    span: lhs.span.clone(),
+                                })?
                                 .iter()
                                 .position(|f| f == name)
                             {
@@ -399,12 +413,18 @@ impl TypeChecker {
                                 .into());
                             }
                         }
+                        HirType::VarReference(v) => {
+                            let Some(t) = self.types_module.get_variable(v) else {
+                                unreachable!();
+                            };
+                            *t
+                        }
                         _ => unreachable!(),
                     };
 
                     let ty = self.resolve(&lhs.ty, &statement.span)?;
                     lhs.ty = refty;
-                    value.ty = self.unify(&ty, &value.ty, &value.span)?;
+                    value.ty = self.unify(&ty, &lhs.ty, &value.span)?;
                 }
             }
         }
@@ -452,6 +472,14 @@ impl TypeChecker {
         Ok(target)
     }
 
+    pub fn get_type_from_ref(&self, ref_ty: TypeId) -> &HirType {
+        if let HirType::Reference { rf, .. } = self.types_module.get_type(&ref_ty) {
+            self.types_module.get_type(rf)
+        } else {
+            unreachable!("The provided ref_ty should be of type Reference");
+        }
+    }
+
     fn resolve_object_types(&mut self, ty: &HirType, fields: &mut [HirExpression]) -> Result<()> {
         let HirType::Struct { fields: fields_tys } = ty else {
             unreachable!("When resolving object types, a type 'struct' should be provided");
@@ -467,6 +495,20 @@ impl TypeChecker {
         let expected = expr.ty;
 
         let calc = match expr.kind {
+            HirExpressionKind::FunctionCall {
+                name,
+                args: ref f_args,
+            } => {
+                let t = self.declarations[name.as_raw() as usize];
+                let HirType::Function { args, return_type } = self.types_module.get_type(&t) else {
+                    unreachable!();
+                };
+                let return_type = *return_type;
+                for (f_arg, t_args) in f_args.iter().zip(args.clone()) {
+                    self.unify(&f_arg.ty, &t_args, span)?;
+                }
+                return_type
+            }
             HirExpressionKind::Int(_) => self.types_module.int_id(),
             HirExpressionKind::Float(_) => self.types_module.float_id(),
             HirExpressionKind::StringLiteral(_) => self.types_module.str_id(),
@@ -480,6 +522,7 @@ impl TypeChecker {
                 {
                     return Ok(self.types_module.bool_id());
                 }
+
                 let lhs_ty = self.get_type_of_expr(lhs, &lhs.span.clone())?;
                 let rhs_ty = self.get_type_of_expr(rhs, &rhs.span.clone())?;
                 self.unify(&lhs_ty, &rhs_ty, span)?
@@ -493,12 +536,9 @@ impl TypeChecker {
                 name,
                 ref mut fields,
             } => {
-                let obj = self.get_type_of_name(&name).clone();
+                let obj = self.get_type_from_ref(name).clone();
                 self.resolve_object_types(&obj, fields)?;
-                self.types_module.insert_unnamed_type(HirType::Reference {
-                    rf: name,
-                    generics: Vec::new(),
-                })
+                name
             }
 
             HirExpressionKind::FieldAccess {
@@ -515,10 +555,17 @@ impl TypeChecker {
                         else {
                             unreachable!();
                         };
+                        let object_ty = *self.types_module.get_variable(id).ok_or(TypeError {
+                            kind: TypeErrorKind::Unrecognized,
+                            span: expr.span.clone(),
+                        })?;
                         if let Some(index) = self
                             .structs
-                            .get(&rf)
-                            .unwrap()
+                            .get(&object_ty)
+                            .ok_or(TypeError {
+                                kind: TypeErrorKind::Unrecognized,
+                                span: expr.span.clone(),
+                            })?
                             .iter()
                             .position(|field| field == name)
                         {
@@ -539,17 +586,34 @@ impl TypeChecker {
                 }
             }
             HirExpressionKind::Bool(_) => self.types_module.bool_id(),
+
             ref un => {
                 unimplemented!("{un:?}")
             }
         };
-
+        
         expr.ty = self.unify(&expected, &calc, span)?;
         Ok(expr.ty)
     }
 
     fn default_expr(&mut self, expr: &mut HirExpression) -> Result<()> {
         match expr.kind {
+            HirExpressionKind::FunctionCall {
+                name,
+                args: ref f_args,
+            } => {
+                let HirType::Function { args, return_type } = self
+                    .types_module
+                    .get_type(&self.declarations[name.as_raw() as usize])
+                else {
+                    unreachable!()
+                };
+                let return_type = *return_type;
+                for (f_arg, t_args) in f_args.iter().zip(args.clone()) {
+                    self.unify(&f_arg.ty, &t_args, &f_arg.span)?;
+                }
+                expr.ty = self.unify(&expr.ty, &return_type, &expr.span)?;
+            }
             HirExpressionKind::Bool(_) => {
                 expr.ty = self.unify(&expr.ty, &self.types_module.bool_id(), &expr.span)?
             }
@@ -569,6 +633,7 @@ impl TypeChecker {
             } => {
                 self.default_expr(rhs)?;
                 self.default_expr(lhs)?;
+
                 if op.is_logical() {
                     expr.ty = self.types_module.bool_id();
                 } else {
