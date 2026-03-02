@@ -449,7 +449,8 @@ component %Counter(i32) {
   count = prop_get p0, 0;
   inc = addi32 count, 1;
   prop_set p0, 0, inc;
-  @emit %count;
+  @emit p0, %count;
+  @rerender p0;
 }
 
 component %Counter(int) {
@@ -472,11 +473,15 @@ AnyComponent main() {
 $entry:
   Counter0 = %Counter(0); //0 = default value
   Counter1 = %Counter(12);
+<<<<<<< HEAD
   ret Counter1;
 =======
   Counter0 = %Counter(0); //0 = default value
   Counter1 = %Counter(12);
 >>>>>>> 61bf353 (chore: wrote basic specification of IR)
+=======
+  ret Counter;
+>>>>>>> b36ea48 (chore: talked about binds and added '@rerender')
 }
 
 ```
@@ -567,6 +572,17 @@ These operations are idealized to be implemented on the future and for the V1 ar
 =======
 >>>>>>> 61bf353 (chore: wrote basic specification of IR)
 =======
+
+### Binds
+
+On Components, @binds are way to determine which value on the component should update which dependency. On the %Counter example above, we had
+```
+@bind %count -> field #t0, 0;
+@bind %count |> f -> field #t1, 0;
+```
+
+which means that, on %count update, it updates with the new value, the value of the field 0 of #t0. For the field 0 of #t1, it updates it using `%count |> f`, which means that the value of `call f, %count`, is used as the new value.
+The `@emit p0, %count` on the function, tells that `p0` should execute its `%count` binds. And after executing them, send a re-render with @rerender.
 
 #### Instructions
 
@@ -720,5 +736,11 @@ Division:
 ##### Strings Operations
 
 * strconcat: Concats the first to the second string and returns a new copy.
+<<<<<<< HEAD
 * strlen: Returns the length of the string
 >>>>>>> 32a7322 (chore: corrected wrong instruction names)
+=======
+* strcmp: Compares the first string to the second one, and returns 1u8 if they're equal, 0u8 if they're not.
+* strcmpne: Compares the first string to the second one, and returns 1u8 if they're not equal, 0u8 otherwise.
+* strlen: Returns the length of provided the string
+>>>>>>> b36ea48 (chore: talked about binds and added '@rerender')
