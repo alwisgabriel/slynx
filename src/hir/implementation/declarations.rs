@@ -2,15 +2,12 @@ use color_eyre::eyre::Result;
 
 use crate::hir::{
     PropertyId, SlynxHir,
-    definitions::{
-        ComponentMemberDeclaration, HirDeclaration, HirDeclarationKind, SpecializedComponent,
-    },
+    definitions::{ComponentMemberDeclaration, HirDeclaration, HirDeclarationKind},
     error::{HIRError, HIRErrorKind},
     types::HirType,
 };
 use crate::parser::ast::{
-    ComponentMember, ComponentMemberKind, ComponentMemberValue, GenericIdentifier, ObjectField,
-    Span, TypedName,
+    ComponentMember, ComponentMemberKind, GenericIdentifier, ObjectField, Span, TypedName,
 };
 
 impl SlynxHir {

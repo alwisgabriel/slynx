@@ -1,3 +1,4 @@
+///Module that implements anything related Specialized Component on the HIR
 use color_eyre::eyre::Result;
 
 use crate::{
@@ -8,8 +9,6 @@ use crate::{
     },
     parser::ast::{ComponentExpression, ComponentMemberValue, Span},
 };
-
-///Module that implements anything related Specialized Component on the HIR
 
 impl SlynxHir {
     pub fn resolve_specialize_text(
@@ -103,7 +102,7 @@ impl SlynxHir {
                 Some(self.resolve_specialized_div(child.values, &child.span)),
                 None,
             ),
-            _ => return (None, Some(child)),
+            _ => (None, Some(child)),
         }
     }
     ///Resolves the provided `component` expression. If it's a specialized one, resolves as a SpecializedComponent, otherwise as a normal 'Component'
@@ -112,7 +111,7 @@ impl SlynxHir {
         component: ComponentExpression,
     ) -> Result<ComponentMemberDeclaration> {
         match self.try_resolve_specialized(component) {
-            (Some(spec), None) => spec.map(|spec| ComponentMemberDeclaration::Specialized(spec)),
+            (Some(spec), None) => spec.map(ComponentMemberDeclaration::Specialized),
             (None, Some(component)) => {
                 let (id, _) =
                     self.retrieve_information_of_type(&component.name.identifier, &component.span)?;
