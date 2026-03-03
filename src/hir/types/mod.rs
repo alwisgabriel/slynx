@@ -72,6 +72,19 @@ pub struct TypesModule {
 }
 impl TypesModule {
     pub fn new() -> Self {
+        // Keep builtin ids deterministic and fail fast if array order drifts.
+        debug_assert_eq!(BOOL_IDX + 1, BUILTIN_TYPES.len());
+        debug_assert!(matches!(BUILTIN_TYPES[INT_IDX], HirType::Int));
+        debug_assert!(matches!(BUILTIN_TYPES[FLOAT_IDX], HirType::Float));
+        debug_assert!(matches!(BUILTIN_TYPES[STR_IDX], HirType::Str));
+        debug_assert!(matches!(BUILTIN_TYPES[VOID_IDX], HirType::Void));
+        debug_assert!(matches!(BUILTIN_TYPES[INFER_IDX], HirType::Infer));
+        debug_assert!(matches!(
+            BUILTIN_TYPES[GENERIC_COMPONENT_IDX],
+            HirType::GenericComponent
+        ));
+        debug_assert!(matches!(BUILTIN_TYPES[BOOL_IDX], HirType::Bool));
+
         let builtins = BuiltinTypes::new();
         Self {
             types: BUILTIN_TYPES.to_vec(),

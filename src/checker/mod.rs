@@ -38,16 +38,15 @@ impl TypeChecker {
             types_module: std::mem::take(&mut hir.types_module),
             declarations: Vec::new(),
         };
-        // Register declaration id -> type before checking bodies.
-        // Function calls index this table by DeclarationId.
+        // DeclarationId is currently assigned linearly in hoisting order,
+        // so declaration type lookup can stay append-only here.
         for decl in &hir.declarations {
-            let index = decl.id.as_raw() as usize;
-            if inner.declarations.len() <= index {
-                inner
-                    .declarations
-                    .resize(index + 1, inner.types_module.void_id());
-            }
-            inner.declarations[index] = decl.ty;
+            debug_assert_eq!(
+                decl.id.as_raw() as usize,
+                inner.declarations.len(),
+                "declaration id must stay linear with declarations table",
+            );
+            inner.declarations.push(decl.ty);
         }
         for decl in &mut hir.declarations {
             inner.check_decl(decl)?;
