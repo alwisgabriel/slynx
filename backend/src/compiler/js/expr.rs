@@ -4,17 +4,14 @@ use swc_ecma_ast::{
     ArrayLit, Expr, ExprOrSpread, IdentName, Lit, MemberExpr, MemberProp, ObjectLit, PropOrSpread,
 };
 
-use crate::{
-    compiler::{js::WebCompiler, slynx_compiler::SlynxCompiler},
-    
-};
+use crate::compiler::{js::WebCompiler, slynx_compiler::SlynxCompiler};
 
 use middleend::intermediate::{
-        IntermediateRepr,
-        context::IntermediateContext,
-        expr::{NativeComponent, NativeComponentKind},
-        id::{ContextHandle, ValueId},
-    };
+    IntermediateRepr,
+    context::IntermediateContext,
+    expr::{NativeComponent, NativeComponentKind},
+    id::{ContextHandle, ValueId},
+};
 
 impl WebCompiler {
     fn compile_array_from_exprs(&self, values: Vec<Expr>) -> Expr {

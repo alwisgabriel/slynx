@@ -1,13 +1,10 @@
 use color_eyre::eyre::Result;
 
-use crate::{
-    checker::TypeChecker,
-    
-};
+use crate::checker::TypeChecker;
 use middleend::hir::{
-        TypeId,
-        definitions::{HirStatement, HirStatementKind},
-    };
+    TypeId,
+    definitions::{HirStatement, HirStatementKind},
+};
 
 impl TypeChecker {
     pub(super) fn default_statement(

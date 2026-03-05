@@ -6,16 +6,18 @@ use std::collections::HashMap;
 
 use color_eyre::eyre::Result;
 
-use crate::{
-    checker::error::{IncompatibleComponentReason, TypeError, TypeErrorKind},
-};
+use crate::checker::error::{IncompatibleComponentReason, TypeError, TypeErrorKind};
 
 use common::ast::Span;
-use middleend::{SlynxHir, definitions::{HirDeclaration, HirDeclarationKind}, hir::{
-         TypeId, VariableId,
-       
+use middleend::{
+    SlynxHir,
+    definitions::{HirDeclaration, HirDeclarationKind},
+    hir::{
+        TypeId, VariableId,
         types::{FieldMethod, HirType, TypesModule},
-    }, symbols::SymbolPointer};
+    },
+    symbols::SymbolPointer,
+};
 #[derive(Debug)]
 pub struct TypeChecker {
     ///A an array of declaration types
@@ -332,14 +334,11 @@ mod tests {
     use super::TypeChecker;
     use crate::{
         checker::error::{TypeError, TypeErrorKind},
-       
         parser::{Parser, lexer::Lexer},
     };
-    use middleend::{
-         hir::{
-            ExpressionId, SlynxHir,
-            definitions::{HirDeclarationKind, HirExpression, HirExpressionKind, HirStatementKind},
-        },
+    use middleend::hir::{
+        ExpressionId, SlynxHir,
+        definitions::{HirDeclarationKind, HirExpression, HirExpressionKind, HirStatementKind},
     };
 
     fn load_hir(path: &str) -> SlynxHir {

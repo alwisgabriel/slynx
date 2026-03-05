@@ -1,10 +1,7 @@
-use crate::{
-    hir::{
-        TypeId, VariableId,
-        error::{HIRError, HIRErrorKind},
-        symbols::SymbolPointer,
-    },
-    
+use crate::hir::{
+    TypeId, VariableId,
+    error::{HIRError, HIRErrorKind},
+    symbols::SymbolPointer,
 };
 use common::ast::{GenericIdentifier, VisibilityModifier};
 

@@ -2,11 +2,12 @@ use color_eyre::eyre::Result;
 
 use crate::parser::{
     Parser,
-    
     error::ParseError,
     lexer::tokens::{Token, TokenKind},
 };
-use common::ast::{ASTDeclaration, ASTDeclarationKind, ASTStatement, ASTStatementKind, Span, TypedName};
+use common::ast::{
+    ASTDeclaration, ASTDeclarationKind, ASTStatement, ASTStatementKind, Span, TypedName,
+};
 impl Parser {
     ///Parses a typed name. A typed name is `name: type`, which is a name that contains a type
     pub fn parse_typedname(&mut self) -> Result<TypedName> {

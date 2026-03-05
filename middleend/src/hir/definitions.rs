@@ -1,7 +1,4 @@
-use crate::{
-    hir::{DeclarationId, ExpressionId, PropertyId, TypeId, VariableId},
-    
-};
+use crate::hir::{DeclarationId, ExpressionId, PropertyId, TypeId, VariableId};
 
 use common::ast::{Operator, Span};
 

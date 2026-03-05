@@ -1,15 +1,12 @@
 use swc_ecma_ast::Ident;
 
-use crate::{
-    compiler::js::WebCompiler,
-    
-};
+use crate::compiler::js::WebCompiler;
 
 use middleend::intermediate::{
-        IntermediateRepr,
-        context::{IntermediateContext, IntermediateContextType},
-        id::{ContextHandle, PropId, VarId},
-    };
+    IntermediateRepr,
+    context::{IntermediateContext, IntermediateContextType},
+    id::{ContextHandle, PropId, VarId},
+};
 
 #[derive(Debug)]
 ///A Function, also refered as 'context' is simply something that might have a scope to run something

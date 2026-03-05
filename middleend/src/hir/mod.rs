@@ -12,24 +12,21 @@ use std::collections::HashMap;
 
 use color_eyre::eyre::Result;
 
-use crate::{
-    hir::{
-        declarations::DeclarationsModule,
-        definitions::{
-            ComponentMemberDeclaration, HirDeclaration, HirDeclarationKind, HirStatement,
-            HirStatementKind,
-        },
-        error::{HIRError, HIRErrorKind},
-        scopes::ScopeModule,
-        symbols::SymbolsModule,
-        types::{HirType, TypesModule},
+use crate::hir::{
+    declarations::DeclarationsModule,
+    definitions::{
+        ComponentMemberDeclaration, HirDeclaration, HirDeclarationKind, HirStatement,
+        HirStatementKind,
     },
-
+    error::{HIRError, HIRErrorKind},
+    scopes::ScopeModule,
+    symbols::SymbolsModule,
+    types::{HirType, TypesModule},
 };
 use common::ast::{
-        ASTDeclaration, ASTDeclarationKind, ASTStatementKind, ComponentMemberKind,
-        ComponentMemberValue, Span, VisibilityModifier,
-    };
+    ASTDeclaration, ASTDeclarationKind, ASTStatementKind, ComponentMemberKind,
+    ComponentMemberValue, Span, VisibilityModifier,
+};
 
 // Re-export new ID types for convenience
 pub use id::{DeclarationId, ExpressionId, PropertyId, TypeId, VariableId};

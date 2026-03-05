@@ -3,22 +3,15 @@ use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use color_eyre::{Report, eyre::Result, owo_colors::OwoColorize};
 
 use backend::compiler::slynx_compiler::SlynxCompiler;
-use middleend::intermediate::IntermediateRepr;
 use frontend::parser::{
     Parser,
     error::ParseError,
     lexer::{Lexer, error::LexerError},
 };
-use middleend::hir::{
-    SlynxHir,
-    error::HIRError,
-};
+use middleend::hir::{SlynxHir, error::HIRError};
+use middleend::intermediate::IntermediateRepr;
 
-use frontend::checker::{
-        TypeChecker,
-        error::TypeError,
-};
-
+use frontend::checker::{TypeChecker, error::TypeError};
 
 #[derive(Debug)]
 ///The type of the error that was generated

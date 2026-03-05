@@ -1,13 +1,13 @@
 use std::path::PathBuf;
 
 pub mod context;
+pub use backend::compiler;
 use backend::js::WebCompiler;
-pub use context::*;
 use backend::slynx_compiler::SlynxCompiler;
+pub use context::*;
 use frontend::TypeChecker;
 pub use frontend::checker;
 pub use frontend::parser;
-pub use backend::compiler;
 use middleend::IntermediateRepr;
 use middleend::SlynxHir;
 pub use middleend::hir;

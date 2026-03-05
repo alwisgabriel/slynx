@@ -1,9 +1,6 @@
-use crate::{
-    intermediate::{
-        id::{ContextHandle, TyId, ValueId, VarId},
-        string::StringHandle,
-    },
-    
+use crate::intermediate::{
+    id::{ContextHandle, TyId, ValueId, VarId},
+    string::StringHandle,
 };
 use common::ast::Operator;
 

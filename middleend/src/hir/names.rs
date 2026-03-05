@@ -1,13 +1,10 @@
 use color_eyre::eyre::Result;
 
-use crate::{
-    hir::{
-        SlynxHir, TypeId, VariableId,
-        error::{HIRError, HIRErrorKind, InvalidTypeReason},
-        symbols::SymbolPointer,
-        types::HirType,
-    },
-    
+use crate::hir::{
+    SlynxHir, TypeId, VariableId,
+    error::{HIRError, HIRErrorKind, InvalidTypeReason},
+    symbols::SymbolPointer,
+    types::HirType,
 };
 
 use common::ast::Span;

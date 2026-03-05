@@ -10,7 +10,6 @@ mod types;
 use color_eyre::eyre::{Report, Result};
 
 use crate::parser::{
-    
     error::ParseError,
     lexer::{
         TokenStream,

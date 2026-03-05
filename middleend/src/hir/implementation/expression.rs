@@ -2,14 +2,11 @@ use std::mem::discriminant;
 
 use color_eyre::eyre::Result;
 
-use crate::{
-    hir::{
-        ExpressionId, SlynxHir, TypeId,
-        definitions::{HirExpression, HirExpressionKind},
-        error::{HIRError, HIRErrorKind},
-        types::{FieldMethod, HirType},
-    },
-    
+use crate::hir::{
+    ExpressionId, SlynxHir, TypeId,
+    definitions::{HirExpression, HirExpressionKind},
+    error::{HIRError, HIRErrorKind},
+    types::{FieldMethod, HirType},
 };
 use common::ast::{ASTExpression, ASTExpressionKind, NamedExpr, Operator, Span};
 

@@ -1,10 +1,7 @@
-use crate::parser::{
-    
-    lexer::tokens::{Token, TokenKind},
-};
+use super::Parser;
+use crate::parser::lexer::tokens::{Token, TokenKind};
 use color_eyre::eyre::Result;
 use common::ast::GenericIdentifier;
-use super::Parser;
 impl Parser {
     ///Looking from where this function initializes, check is this is a generic one.
     ///Note that this will only work when the function initializes on something like: N<...

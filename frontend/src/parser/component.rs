@@ -1,11 +1,10 @@
 use color_eyre::eyre::Result;
 use common::ast::{
-    ASTDeclaration, ASTDeclarationKind, ComponentMember, ComponentMemberKind,
-        GenericIdentifier, Span, VisibilityModifier,
+    ASTDeclaration, ASTDeclarationKind, ComponentMember, ComponentMemberKind, GenericIdentifier,
+    Span, VisibilityModifier,
 };
 
 use crate::parser::{
-    
     error::ParseError,
     lexer::tokens::{Token, TokenKind},
 };

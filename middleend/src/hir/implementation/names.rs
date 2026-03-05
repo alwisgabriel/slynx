@@ -1,12 +1,9 @@
 use color_eyre::eyre::Result;
 
-use crate::{
-    hir::{
-        DeclarationId, SlynxHir, TypeId,
-        error::{HIRError, HIRErrorKind},
-        types::HirType,
-    },
-    
+use crate::hir::{
+    DeclarationId, SlynxHir, TypeId,
+    error::{HIRError, HIRErrorKind},
+    types::HirType,
 };
 
 use common::ast::{GenericIdentifier, Span};

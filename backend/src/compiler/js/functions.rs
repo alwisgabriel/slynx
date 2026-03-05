@@ -3,16 +3,13 @@ use swc_ecma_ast::{
     AssignPat, BindingIdent, BlockStmt, Decl, EmptyStmt, FnDecl, Function, Param, Pat, Stmt,
 };
 
-use crate::{
-    compiler::{js::WebCompiler, slynx_compiler::SlynxCompiler},
-    
-};
+use crate::compiler::{js::WebCompiler, slynx_compiler::SlynxCompiler};
 use middleend::intermediate::{
-        IntermediateRepr,
-        context::{IntermediateContext, IntermediateContextType, IntermediateProperty},
-        id::ContextHandle,
-        node::IntermediateInstruction,
-    };
+    IntermediateRepr,
+    context::{IntermediateContext, IntermediateContextType, IntermediateProperty},
+    id::ContextHandle,
+    node::IntermediateInstruction,
+};
 impl WebCompiler {
     pub fn retrieve_component_params(
         &mut self,

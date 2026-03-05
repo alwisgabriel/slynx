@@ -15,19 +15,16 @@ use swc_ecma_ast::{
 };
 use swc_ecma_codegen::{Config, Emitter, text_writer::JsWriter};
 
-use crate::{
-    compiler::{js::contexts::JsFunction, slynx_compiler::SlynxCompiler},
-    
-};
+use crate::compiler::{js::contexts::JsFunction, slynx_compiler::SlynxCompiler};
 
-use middleend::intermediate::{
-        IntermediateRepr,
-        context::IntermediateContext,
-        expr::{IntermediateExpr, IntermediateExprKind},
-        id::ContextHandle,
-        node::{IntermediateInstruction, IntermediateInstructionKind, IntermediatePlace},
-    };
 use common::ast::Operator;
+use middleend::intermediate::{
+    IntermediateRepr,
+    context::IntermediateContext,
+    expr::{IntermediateExpr, IntermediateExprKind},
+    id::ContextHandle,
+    node::{IntermediateInstruction, IntermediateInstructionKind, IntermediatePlace},
+};
 #[derive(Debug, Default)]
 pub struct WebCompiler {
     script: Script,
@@ -298,19 +295,14 @@ fn operator_to_binary_op(operator: &Operator) -> BinaryOp {
 #[cfg(test)]
 mod tests {
     use super::WebCompiler;
-    use crate::{
-        compiler::{js::contexts::JsFunction, slynx_compiler::SlynxCompiler},
-        
-    };
-    use middleend::{
-        intermediate::{
-            IntermediateRepr,
-            context::IntermediateContext,
-            expr::IntermediateExpr,
-            id::{ContextHandle, VarId},
-            node::IntermediateInstruction,
-            types::IntermediateType,
-        },
+    use crate::compiler::{js::contexts::JsFunction, slynx_compiler::SlynxCompiler};
+    use middleend::intermediate::{
+        IntermediateRepr,
+        context::IntermediateContext,
+        expr::IntermediateExpr,
+        id::{ContextHandle, VarId},
+        node::IntermediateInstruction,
+        types::IntermediateType,
     };
     use swc_ecma_ast::{Expr, Stmt};
 

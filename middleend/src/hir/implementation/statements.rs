@@ -1,11 +1,8 @@
 use color_eyre::eyre::Result;
 
-use crate::{
-    hir::{
-        SlynxHir,
-        definitions::{HirStatement, HirStatementKind},
-    },
-    
+use crate::hir::{
+    SlynxHir,
+    definitions::{HirStatement, HirStatementKind},
 };
 use common::ast::{ASTExpression, ASTExpressionKind, ASTStatement, ASTStatementKind};
 

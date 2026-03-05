@@ -2,14 +2,10 @@
 use color_eyre::eyre::Result;
 use common::{ComponentExpression, ComponentMemberValue, Span};
 
-
-use crate::{
-    hir::{
-        SlynxHir,
-        definitions::{ComponentMemberDeclaration, SpecializedComponent},
-        error::{HIRError, HIRErrorKind},
-    },
-    
+use crate::hir::{
+    SlynxHir,
+    definitions::{ComponentMemberDeclaration, SpecializedComponent},
+    error::{HIRError, HIRErrorKind},
 };
 
 impl SlynxHir {

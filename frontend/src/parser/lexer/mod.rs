@@ -1,12 +1,9 @@
 pub mod error;
 use std::{collections::VecDeque, ops::Index};
 
-use crate::parser::{
-    
-    lexer::{
-        error::LexerError,
-        tokens::{Token, TokenKind},
-    },
+use crate::parser::lexer::{
+    error::LexerError,
+    tokens::{Token, TokenKind},
 };
 use common::ast::Span;
 pub mod tokens;

@@ -2,18 +2,16 @@ use color_eyre::eyre::Result;
 
 use super::TypeChecker;
 
-use crate::{
-    checker::error::{TypeError, TypeErrorKind},
-};
+use crate::checker::error::{TypeError, TypeErrorKind};
 use common::ast::Span;
 use middleend::hir::{
-        DeclarationId, TypeId,
-        definitions::{
-            ComponentMemberDeclaration, HirExpression, HirExpressionKind, HirStatement,
-            HirStatementKind, SpecializedComponent,
-        },
-        types::{FieldMethod, HirType},
-    };
+    DeclarationId, TypeId,
+    definitions::{
+        ComponentMemberDeclaration, HirExpression, HirExpressionKind, HirStatement,
+        HirStatementKind, SpecializedComponent,
+    },
+    types::{FieldMethod, HirType},
+};
 impl TypeChecker {
     fn get_function_signature(
         &self,

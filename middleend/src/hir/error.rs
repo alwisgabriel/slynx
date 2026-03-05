@@ -1,7 +1,4 @@
-use crate::{
-    hir::{definitions::HirExpression, types::HirType},
-    
-};
+use crate::hir::{definitions::HirExpression, types::HirType};
 
 use common::ast::{ComponentExpression, Span};
 
