@@ -1,5 +1,5 @@
 use common::ast::Span;
-use middleend::hir::{DeclarationId, VariableId, types::HirType};
+use crate::hir::{DeclarationId, VariableId, types::HirType};
 
 #[derive(Debug)]
 pub enum IncompatibleComponentReason {

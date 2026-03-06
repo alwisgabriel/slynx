@@ -2,8 +2,9 @@ use color_eyre::eyre::Result;
 
 use crate::parser::{
     Parser,
-    lexer::tokens::{Token, TokenKind},
 };
+use crate::lexer::tokens::{Token, TokenKind};
+
 use common::ast::{ASTStatement, ASTStatementKind, Span};
 
 impl Parser {

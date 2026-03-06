@@ -1,5 +1,5 @@
 use super::Parser;
-use crate::parser::lexer::tokens::{Token, TokenKind};
+use crate::lexer::tokens::{Token, TokenKind};
 use color_eyre::eyre::Result;
 use common::ast::GenericIdentifier;
 impl Parser {

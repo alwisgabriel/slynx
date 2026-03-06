@@ -2,7 +2,7 @@ use color_eyre::eyre::Result;
 
 use super::TypeChecker;
 
-use middleend::hir::{
+use crate::hir::{
     TypeId,
     definitions::{ComponentMemberDeclaration, HirDeclaration, HirDeclarationKind},
     types::HirType,

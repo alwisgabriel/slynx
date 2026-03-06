@@ -9,13 +9,13 @@ use color_eyre::eyre::Result;
 use crate::checker::error::{IncompatibleComponentReason, TypeError, TypeErrorKind};
 
 use common::ast::Span;
-use middleend::{
+use crate::hir::{
     SlynxHir,
     definitions::{HirDeclaration, HirDeclarationKind},
-    hir::{
+    
         TypeId, VariableId,
         types::{FieldMethod, HirType, TypesModule},
-    },
+    
     symbols::SymbolPointer,
 };
 #[derive(Debug)]
@@ -333,14 +333,10 @@ impl TypeChecker {
 mod tests {
     use super::TypeChecker;
     use crate::{
-        checker::error::{TypeError, TypeErrorKind},
-        parser::{Parser, lexer::Lexer},
+        checker::error::{TypeError, TypeErrorKind}, hir::{ExpressionId, SlynxHir, definitions::{HirDeclarationKind, HirExpression, HirExpressionKind, HirStatementKind}}, parser::Parser,
+        lexer::Lexer,
     };
-    use middleend::hir::{
-        ExpressionId, SlynxHir,
-        definitions::{HirDeclarationKind, HirExpression, HirExpressionKind, HirStatementKind},
-    };
-
+    
     fn load_hir(path: &str) -> SlynxHir {
         let source = std::fs::read_to_string(path).expect("source file should exist");
         let tokens = Lexer::tokenize(&source).expect("source should tokenize");

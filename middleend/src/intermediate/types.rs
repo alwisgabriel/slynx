@@ -1,10 +1,10 @@
-use crate::{
+use frontend::{
     hir::{
         TypeId,
         types::{FieldMethod, HirType, TypesModule},
     },
-    intermediate::IntermediateRepr,
 };
+use crate::intermediate::IntermediateRepr;
 
 #[derive(Debug, Clone)]
 pub enum IntermediateType {
@@ -82,7 +82,7 @@ impl IntermediateRepr {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::hir::{VariableId, types::HirType};
+    use frontend::hir::{VariableId, types::HirType};
 
     #[test]
     fn resolves_var_reference_to_concrete_type() {

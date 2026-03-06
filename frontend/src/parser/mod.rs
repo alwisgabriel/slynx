@@ -2,19 +2,18 @@ mod component;
 pub mod error;
 mod expr;
 mod functions;
-pub mod lexer;
 pub mod objects;
 mod statement;
 mod types;
 
 use color_eyre::eyre::{Report, Result};
 
+use crate::lexer::{
+    TokenStream,
+    tokens::{Token, TokenKind},
+};
 use crate::parser::{
     error::ParseError,
-    lexer::{
-        TokenStream,
-        tokens::{Token, TokenKind},
-    },
 };
 
 use common::ast::ASTDeclaration;

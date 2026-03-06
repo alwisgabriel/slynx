@@ -468,7 +468,7 @@ version = "0.1.0"
 dependencies = [
  "color-eyre",
  "common",
- "middleend",
+ "rart",
 ]
 
 [[package]]
@@ -782,7 +782,7 @@ version = "0.1.0"
 dependencies = [
  "color-eyre",
  "common",
- "rart",
+ "frontend",
 ]
 
 [[package]]

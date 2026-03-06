@@ -5,9 +5,9 @@ use common::ast::{
 };
 
 use crate::parser::{
-    error::ParseError,
-    lexer::tokens::{Token, TokenKind},
+    error::ParseError
 };
+use crate::lexer::tokens::{Token, TokenKind};
 
 use super::Parser;
 impl Parser {

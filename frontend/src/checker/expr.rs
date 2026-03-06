@@ -4,7 +4,7 @@ use super::TypeChecker;
 
 use crate::checker::error::{TypeError, TypeErrorKind};
 use common::ast::Span;
-use middleend::hir::{
+use crate::hir::{
     DeclarationId, TypeId,
     definitions::{
         ComponentMemberDeclaration, HirExpression, HirExpressionKind, HirStatement,

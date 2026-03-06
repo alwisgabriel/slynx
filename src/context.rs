@@ -6,12 +6,11 @@ use backend::compiler::slynx_compiler::SlynxCompiler;
 use frontend::parser::{
     Parser,
     error::ParseError,
-    lexer::{Lexer, error::LexerError},
 };
-use middleend::hir::{SlynxHir, error::HIRError};
-use middleend::intermediate::IntermediateRepr;
-
+use frontend::lexer::{Lexer, error::LexerError};
+use frontend::hir::{SlynxHir, error::HIRError};
 use frontend::checker::{TypeChecker, error::TypeError};
+use middleend::IntermediateRepr;
 
 #[derive(Debug)]
 ///The type of the error that was generated

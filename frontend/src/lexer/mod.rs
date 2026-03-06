@@ -1,7 +1,7 @@
 pub mod error;
 use std::{collections::VecDeque, ops::Index};
 
-use crate::parser::lexer::{
+use crate::lexer::{
     error::LexerError,
     tokens::{Token, TokenKind},
 };

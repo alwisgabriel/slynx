@@ -1,8 +1,8 @@
 use crate::parser::{
     Parser,
     error::ParseError,
-    lexer::tokens::{Token, TokenKind},
-};
+};   
+use crate::lexer::tokens::{Token, TokenKind};
 use color_eyre::eyre::Result;
 use common::ast::{
     ASTExpression, ASTExpressionKind, ComponentExpression, ComponentMemberValue, GenericIdentifier,
