@@ -13,6 +13,8 @@ impl std::fmt::Display for TokenKind {
             Self::And => "&&".to_string(),
             Self::Or => "||".to_string(),
             Self::BitAnd => "&".to_string(),
+            Self::If => "if".to_string(),
+            Self::Else => "else".to_string(),
             Self::BitOr => "|".to_string(),
             Self::Dot => ".".to_string(),
             Self::LParen => "(".to_string(),
@@ -59,6 +61,8 @@ impl std::fmt::Display for TokenKind {
 pub enum TokenKind {
     CommonComent,
     LParen,
+    If,
+    Else,
     RParen,
     LBrace,
     RBrace,
@@ -114,6 +118,17 @@ impl Token {
             end: pos, 
             start: pos,
         },
+    // constructor helpers for keywords; snake_case to satisfy lint
+    pub fn if_token(pos: usize) -> Self {
+        Self {
+            kind: TokenKind::If,
+            span: Span { end: pos, start: pos },
+        }
+    }
+    pub fn else_token(pos: usize) -> Self {
+        Self {
+            kind: TokenKind::Else,
+            span: Span { end: pos, start: pos },
         }
     }
     pub fn bitor(pos: usize) -> Self {
