@@ -119,25 +119,25 @@ impl Lexer {
                     }
                 }
                 '/' => {
-                    if let Some('*') = chars.get(idx + 1){
-                        
-                        while idx < chars.len(){
-                            if let Some('\n')= chars.get(idx){
+                    if let Some('*') = chars.get(idx + 1) {
+                        while idx < chars.len() {
+                            if let Some('\n') = chars.get(idx) {
                                 lines.push(idx);
                             }
-                            if let Some('*') = chars.get(idx) && let Some('/') = chars.get(idx + 1){
+                            if let Some('*') = chars.get(idx)
+                                && let Some('/') = chars.get(idx + 1)
+                            {
                                 break;
                             }
                             idx += 1;
                         }
                         continue;
-                    }else if let Some('=') = chars.get(idx + 1) {
-
+                    } else if let Some('=') = chars.get(idx + 1) {
                         idx += 1;
                         Token::slasheq(idx)
-                    } else if let Some('/') = chars.get(idx +1){
-                        while idx < chars.len(){
-                            if chars.get(idx) == Some(&'\n'){
+                    } else if let Some('/') = chars.get(idx + 1) {
+                        while idx < chars.len() {
+                            if chars.get(idx) == Some(&'\n') {
                                 lines.push(idx);
                             }
                             idx += 1;
@@ -147,6 +147,7 @@ impl Lexer {
                         Token::slash(idx)
                     }
                 }
+
                 '"' => {
                     let mut buffer = String::new();
                     idx += 1;
@@ -258,6 +259,14 @@ impl Lexer {
                         },
                         "prop" => Token {
                             kind: TokenKind::Prop,
+                            span,
+                        },
+                        "if" => Token {
+                            kind: TokenKind::If,
+                            span,
+                        },
+                        "else" => Token {
+                            kind: TokenKind::Else,
                             span,
                         },
                         "true" => Token {

@@ -118,4 +118,9 @@ pub enum HirExpressionKind {
         name: DeclarationId,
         args: Vec<HirExpression>,
     },
+    If {
+        condition: Box<HirExpression>,
+        then_branch: Vec<HirStatement>,
+        else_branch: Option<Vec<HirStatement>>,
+    },
 }

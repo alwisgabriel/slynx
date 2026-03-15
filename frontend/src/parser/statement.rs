@@ -10,6 +10,7 @@ impl Parser {
     ///Maybe, in the future, more things will be parsed.
     ///Obs: this function should initialize right after 'let' token, and the `letstan` the span of the 'let' token
     pub fn parse_let_statement(&mut self, letspan: Span) -> Result<ASTStatement> {
+        self.set_flags(super::ParserFlags::RequireSemicolon);
         let mut mutable = false;
         if let TokenKind::Mut = self.peek()?.kind {
             self.eat()?;
@@ -61,6 +62,7 @@ impl Parser {
             _ => {
                 let expr = self.parse_expression()?;
                 if matches!(self.peek()?.kind, TokenKind::Eq) && expr.is_assignable() {
+                    self.set_flags(super::ParserFlags::RequireSemicolon);
                     self.eat()?;
                     let rhs = self.parse_expression()?;
                     Ok(ASTStatement {

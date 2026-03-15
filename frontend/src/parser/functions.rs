@@ -77,11 +77,13 @@ impl Parser {
             TokenKind::LBrace => {
                 let mut body = Vec::new();
                 while !matches!(self.peek()?.kind, TokenKind::RBrace) {
-                    body.push(self.parse_statement()?);
+                    let stmt = self.parse_statement()?;
+                    body.push(stmt);
+
                     if self.peek()?.kind == TokenKind::RBrace {
                         continue;
                     }
-                    self.expect(&TokenKind::SemiColon)?;
+                    self.finish_current_parse()?;
                 }
                 let end = self.expect(&TokenKind::RBrace)?.span.end;
                 Ok(ASTDeclaration {

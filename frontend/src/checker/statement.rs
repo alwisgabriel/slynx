@@ -13,8 +13,12 @@ impl TypeChecker {
         expected: &TypeId,
     ) -> Result<()> {
         match &mut statement.kind {
-            HirStatementKind::Variable { value, .. } => {
-                value.ty = self.resolve(&value.ty, &statement.span)?;
+            HirStatementKind::Variable { name, value } => {
+                // Ensure the initializer expression is fully typed and propagate it to the variable.
+                self.default_expr(value)?;
+                let ty = self.get_type_of_expr(value)?;
+                value.ty = ty;
+                self.types_module.insert_variable(*name, ty);
             }
             HirStatementKind::Assign { lhs, value } => {
                 let ty = self.resolve(&lhs.ty, &lhs.span)?;
