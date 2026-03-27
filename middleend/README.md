@@ -5,6 +5,9 @@ First of all the IR follows SSA and is extremely typed.
 The IR has got the concept of 'contexts' that are anything able to be run, this means a struct isn't a context, because it by itself cannot execute code, but a method or a function are, as well as components that can have code
 to be run, such as the reactivity model.
 
+For the stage that extracts reactive dependencies before linearization/IR
+lowering, see [docs/reactive-graph-generation.md](docs/reactive-graph-generation.md).
+
 ## Syntax
 
 ### Basic Types
