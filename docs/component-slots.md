@@ -13,10 +13,13 @@ This is a design/specification document.
 It does **not** mean slot syntax is already implemented on the current `main`
 branch.
 
+This document is scoped to the **first slot implementation target**, currently
+understood as the slot model intended for `v0.0.1`-level work.
+
 The goal of this document is to record:
 
 - what direction is already agreed;
-- what rules are recommended for the first implementation;
+- what rules are recommended for the `v0.0.1` / first implementation;
 - what still needs explicit approval before code changes start.
 
 ## Goal
@@ -128,7 +131,7 @@ properties:
 
 This is the main reason the slot contract should be specified early.
 
-## Recommended Rules For The First Implementation
+## Recommended Rules For The First Implementation (`v0.0.1` Scope)
 
 To keep the first implementation small and predictable, this document recommends
 the following defaults:
@@ -182,7 +185,7 @@ For example:
 
 These are explicitly out of scope for the first version.
 
-## Non-Goals For The First Version
+## Non-Goals For The First Version (`v0.0.1` Scope)
 
 The first slot implementation does **not** need to solve:
 
