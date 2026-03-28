@@ -144,7 +144,7 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR.
 
 - [GitHub Issues](https://github.com/Slynx-Language/slynx/issues)
 - [GitHub Discussions](https://github.com/Slynx-Language/slynx/discussions)
-- [Discord Server](https://discord.gg/HVcmTTwSe9)
+- [Discord Server](https://discord.gg/B4pHKHqNxG)
 
 ## License
 
