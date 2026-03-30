@@ -284,7 +284,7 @@ impl SlynxHir {
 
                 let kind = self.organized_object_fields(ty, fields, &expr.span)?;
                 Ok(HirExpression {
-                    id: ExpressionId::new(), // Changed to ExpressionId
+                    id: ExpressionId::new(),
                     ty,
                     kind,
                     span: expr.span,

@@ -72,13 +72,12 @@ impl SlynxIR {
                         expr: parent,
                         field_index,
                     } => {
-                        // Evaluate the parent expression to get its value
                         let parent_value = self.get_value_for(parent, temp)?;
                         let parent_ty = self.get_type_of_value(parent_value.clone(), temp);
 
                         // SetField: create a new struct with the field modified
-                        let _target = self.insert_value(self.get_value(parent_value));
-                        let _val = self.insert_value(self.get_value(value_ptr));
+                        self.insert_value(self.get_value(parent_value));
+                        self.insert_value(self.get_value(value_ptr));
                         let setfield_ptr = IRPointer::<Value, 2>::new(self.values.len() - 2, 2);
                         let setfield_instr = self.insert_instruction(
                             temp.current_label(),
